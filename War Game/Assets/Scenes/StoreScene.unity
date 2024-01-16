@@ -402,7 +402,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 599420630}
-  - component: {fileID: 599420629}
   - component: {fileID: 599420631}
   m_Layer: 0
   m_Name: Manager
@@ -411,19 +410,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &599420629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 599420628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 468621b9603297e4595ffe152fc8f323, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walletText: {fileID: 2061557801}
 --- !u!4 &599420630
 Transform:
   m_ObjectHideFlags: 0
@@ -453,6 +439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saleItems: {fileID: 1678395604}
   saleItemsPrefab: {fileID: 9006274079574328928, guid: 12ba1e6aac7723342a3c8c81553ebf83, type: 3}
+  walletText: {fileID: 2061557801}
 --- !u!1 &686403480
 GameObject:
   m_ObjectHideFlags: 0

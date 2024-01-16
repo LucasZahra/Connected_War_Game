@@ -141,12 +141,15 @@ public class Store_Manager : MonoBehaviour
             DownloadImageAsync(_instance.GetReferenceFromUrl(baseUrl + "/" + asset.Image + ".jpg"), 
                 saleitem.transform.GetChild(2).GetComponent<RawImage>());
 
-            saleitem.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => PlayerWallet.DecreaseBalance(int.Parse(asset.Price));
-
-            GameObject.Find("StoreBtn").GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadSceneAsync("StoreScene"));
+            saleitem.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => BuyButtonPressed());
 
             Debug.Log("IMP" +baseUrl + "/" + asset.Image + ".jpg");
         }
+    }
+
+    void BuyButtonPressed()
+    {
+        DecreaseBalance(300);
     }
 
 

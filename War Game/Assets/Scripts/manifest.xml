@@ -6,7 +6,7 @@
         <asset>
             <itemId>100</itemId>
             <desc>Green Blurred Background</desc>
-			<price>350 Coins</price>
+			<price>300 Coins</price>
             <image>green-blurred-background</image>
         </asset>
 		<asset>
@@ -18,7 +18,7 @@
 		<asset>
 			<itemId>102</itemId>
 			<desc>Green Geometric Background</desc>
-			<price>400 Coins</price>
+			<price>300 Coins</price>
 			<image>green-geometric-background</image>
 		</asset>
     </assets>

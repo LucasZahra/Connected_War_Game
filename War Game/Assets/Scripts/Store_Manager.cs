@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Firebase.Database;
 using Firebase.Extensions;
 using Firebase.Storage;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Task = System.Threading.Tasks.Task;
 
 public class Store_Manager : MonoBehaviour
 {
@@ -147,14 +149,50 @@ public class Store_Manager : MonoBehaviour
             DownloadImageAsync(_instance.GetReferenceFromUrl(baseUrl + "/" + asset.Image + ".jpg"),
                 saleitem.transform.GetChild(2).GetComponent<RawImage>());
 
-            saleitem.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => BuyButtonPressed());
+            saleitem.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => BuyButtonPressed(asset.Description));
 
             Debug.Log("IMP" + baseUrl + "/" + asset.Image + ".jpg");
         }
     }
 
-    void BuyButtonPressed()
+    void BuyButtonPressed(string itemDescription)
     {
         DecreaseBalance(300);
+
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        string playerId = "LucasZahra";
+
+        PurchaseData purchaseData = new PurchaseData(playerId, itemDescription, DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+
+        string json = JsonUtility.ToJson(purchaseData);
+
+        reference.Child("purchases").Push().SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Failed to push purchase data to the database: " + task.Exception);
+            }
+            else
+            {
+                Debug.Log("Purchase data successfully pushed to the database!");
+            }
+        });
+    }
+
+    public class PurchaseData
+    {
+        public string playerId;
+        public string itemPurchased;
+        public string date;
+        public string time;
+
+        public PurchaseData(string playerId, string itemPurchased, string date, string time)
+        {
+            this.playerId = playerId;
+            this.itemPurchased = itemPurchased;
+            this.date = date;
+            this.time = time;
+        }
     }
 }

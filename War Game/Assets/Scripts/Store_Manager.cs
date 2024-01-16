@@ -49,29 +49,32 @@ public class Store_Manager : MonoBehaviour
     public void DecreaseBalance(int amount)
     {
         // Decrease the wallet balance and save it to PlayerPrefs
-        currentBalance -= amount;
+        if (currentBalance >= amount)
+        {
+            currentBalance -= amount;
+            UpdateWalletDisplay();
+        }
+        else
+        {
+            Debug.Log("Cannot reduce more than 0");
+        }
 
-        // Ensure the balance doesn't go below zero
         currentBalance = Mathf.Max(currentBalance, 0);
 
         PlayerPrefs.SetInt("PlayerBalance", currentBalance);
         PlayerPrefs.Save();
 
-        // Update the wallet text display
-        UpdateWalletDisplay();
     }
 
     private void Update()
     {
-        // Example: Decrease wallet balance over time (for demonstration purposes)
-        // In your actual game, you'll update the wallet balance based on player actions, etc.
         if (Input.GetKeyDown(KeyCode.S))
         {
-            DecreaseBalance(100); // Decrease balance by 100 coins on key press (for example)
+            DecreaseBalance(100);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            IncreaseBalance(100); // Decrease balance by 100 coins on key press (for example)
+            IncreaseBalance(100);
         }
     }
 
@@ -82,7 +85,8 @@ public class Store_Manager : MonoBehaviour
         Debug.Log(localFile);
         // Start downloading a file
         Task task = reference.GetFileAsync(localFile,
-            new StorageProgress<DownloadState>(state => {
+            new StorageProgress<DownloadState>(state =>
+            {
                 // called periodically during the download
                 Debug.Log(String.Format(
                     "Progress: {0} of {1} bytes transferred.",
@@ -91,7 +95,8 @@ public class Store_Manager : MonoBehaviour
                 ));
             }), CancellationToken.None);
 
-        task.ContinueWithOnMainThread(resultTask => {
+        task.ContinueWithOnMainThread(resultTask =>
+        {
             if (!resultTask.IsFaulted && !resultTask.IsCanceled)
             {
                 Debug.Log("Download finished.");
@@ -104,7 +109,8 @@ public class Store_Manager : MonoBehaviour
     public void DownloadImageAsync(StorageReference reference, RawImage rawImage)
     {
         const long maxAllowedSize = 1 * 5600 * 5600;
-        reference.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task => {
+        reference.GetBytesAsync(maxAllowedSize).ContinueWithOnMainThread(task =>
+        {
             if (task.IsFaulted || task.IsCanceled)
             {
                 Debug.LogException(task.Exception);
@@ -124,8 +130,8 @@ public class Store_Manager : MonoBehaviour
 
     public void ReadManifest(string path)
     {
-        
-        assets = RepositoryReader.ReadRepository(path,out string baseUrl);
+
+        assets = RepositoryReader.ReadRepository(path, out string baseUrl);
 
         Debug.Log(baseUrl);
 
@@ -138,12 +144,12 @@ public class Store_Manager : MonoBehaviour
             saleitem.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().text = asset.Description;
             saleitem.transform.GetChild(1).GetComponent<TMPro.TMP_Text>().text = asset.Price;
 
-            DownloadImageAsync(_instance.GetReferenceFromUrl(baseUrl + "/" + asset.Image + ".jpg"), 
+            DownloadImageAsync(_instance.GetReferenceFromUrl(baseUrl + "/" + asset.Image + ".jpg"),
                 saleitem.transform.GetChild(2).GetComponent<RawImage>());
 
             saleitem.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => BuyButtonPressed());
 
-            Debug.Log("IMP" +baseUrl + "/" + asset.Image + ".jpg");
+            Debug.Log("IMP" + baseUrl + "/" + asset.Image + ".jpg");
         }
     }
 
@@ -151,6 +157,4 @@ public class Store_Manager : MonoBehaviour
     {
         DecreaseBalance(300);
     }
-
-
 }
